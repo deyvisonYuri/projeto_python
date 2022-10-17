@@ -13,7 +13,7 @@ fileMenu.add_command(label="Cadastrar"
             ,command=iniciarTelaCadastro)
 fileMenu.add_command(label="Cadastrar"
             ,command=iniciarTelaCadastro)
-menuPrincipal.add_cascade(label="Funçao"
+menuPrincipal.add_cascade(label="Funcao"
                         ,menu=fileMenu)
 
 
