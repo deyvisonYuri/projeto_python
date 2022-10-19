@@ -32,10 +32,27 @@ def desconectar(conexao):
 def selecionarUsuarios():
         conn = conexao()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM USUARIOS")
+        cursor.execute("SELECT * FROM usuarios")
+        table= cursor.fetchall()
+        print('\n Usuarios: ')
+        for row in table:
+                print ('id',row[0],end='\n')
+                print ('nome:',row[1],end='\n')
+                print ('sobrenome',row[2],end='\n')
+                print ('cidade',row[3],end='\n')
+                print ('estado',row[4],end='\n')
+                print ('nascimento',row[5],end='\n')
+
+def inserirUsuarios(usuario):
+        con=conexao()
+        cursor=con.cursor()
+        cursor.execute(f"INSERT INTO usuarios(id,nome,sobrenome,cidade,estado,data_nascimento)" f"VALUES('{usuario.id}','{usuario.nome}','{usuario.sobrenome}','{usuario.cidade}','{usuario.estado}','{usuario.data_nascimento}')")
+        con.commit()
+        desconectar(con)
 
 def cadastrarUsuarios():
     janelaUsuarios = tk.Toplevel(app)
+    selecionarUsuarios()
 
     lblNome = tk.Label(janelaUsuarios,text="Informe o seu nome: "
             ,font="Times"
@@ -75,11 +92,13 @@ def cadastrarUsuarios():
     
     def salvarUsuario():
         conn = conexao()
-        print("O nome informado foi: ",entryNome.get())
-        print("O sobrenome informado foi: ", entrySobrenome.get())
-        print("A data de nascimento informada foi: ", entryDataNascimento.get())
-        print("A cidade informada foi: ", entryCidade.get())
-        print("O estado informado foi: ",entryEstado.get())
+        Usuario= Usuarios(None,entryNome.get(),entrySobrenome.get(),entryCidade.get(),entryEstado.get(),entryDataNascimento.get())
+        inserirUsuarios(Usuario)
+        #print("O nome informado foi: ",entryNome.get())
+        #print("O sobrenome informado foi: ", entrySobrenome.get())
+        #print("A data de nascimento informada foi: ", entryDataNascimento.get())
+        #print("A cidade informada foi: ", entryCidade.get())
+        #print("O estado informado foi: ",entryEstado.get())
     btnSalvar = tk.Button(janelaUsuarios,width=20
             ,text="Salvar", command=salvarUsuario)
     btnSalvar.place(x=100,y=175)
