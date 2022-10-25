@@ -1,5 +1,9 @@
+from optparse import Values
 import tkinter as tk
+from tkinter import ttk
+from tkinter.tix import Tree
 import mysql.connector
+from tkinter.messagebox import showinfo
 #pip install mysql-connector
 
 class Usuarios:
@@ -29,19 +33,43 @@ def desconectar(conexao):
         if conexao:
                 conexao.close()
 
-def selecionarUsuarios():
+def selecionarUsuarios(janelaUsuarios):
         conn = conexao()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM usuarios")
         table= cursor.fetchall()
         print('\n Usuarios: ')
+
+        columns= ('id','nome','sobrenome','cidade','estado','data_nascimento')
+        Tree= ttk.Treeview(janelaUsuarios, columns=columns, show= 'headings')
+
+        #define cabeçalhos
+        Tree.heading('id',text='#')
+        Tree.heading('nome',text= 'nome')
+        Tree.heading('sobrenome',text= 'sobrenome')
+        Tree.heading('cidade',text='cidade')
+        Tree.heading('estado',text='estado')
+        Tree.heading('data_nascimento',text='data de nascimento')
+
+        def item_selected(self):
+                item= Tree.focus()
+        Tree.bind('<<treeviewselect>>', item_selected)
+        Tree.grid(row=0, column=0, sticky=tk.NSEW)
+        
+        #adicionar uma barra de rolagem
+        scrollbar= ttk.Scrollbar(janelaUsuarios,orient=tk.VERTICAL,command=Tree.yview)
+        Tree.configure(yscroll= scrollbar.set)
+        scrollbar.grid(row=0, column=1,sticky='ns')
+        usuarios=[]
         for row in table:
-                print ('id',row[0],end='\n')
-                print ('nome:',row[1],end='\n')
-                print ('sobrenome',row[2],end='\n')
-                print ('cidade',row[3],end='\n')
-                print ('estado',row[4],end='\n')
-                print ('nascimento',row[5],end='\n')
+                usuarios.append((f'{row[0]}',f'{row[1]}',f'{row[2]}',f'{row[3]}',f'{row[4]}',f'{row[5]}'))
+
+        for user in usuarios:
+                Tree.insert('',tk.END,values=user)
+
+        #for row in table:
+                
+
 
 def inserirUsuarios(usuario):
         con=conexao()
@@ -52,43 +80,41 @@ def inserirUsuarios(usuario):
 
 def cadastrarUsuarios():
     janelaUsuarios = tk.Toplevel(app)
-    selecionarUsuarios()
-
+    selecionarUsuarios(janelaUsuarios)
     lblNome = tk.Label(janelaUsuarios,text="Informe o seu nome: "
             ,font="Times"
             ,bg="white",foreground="black")
-    lblNome.place(x=100,y=50)
-
+    lblNome.place(x=100,y=250)
     entryNome = tk.Entry(janelaUsuarios)
-    entryNome.place(x=230,y=55)
+    entryNome.place(x=230,y=250)
     
     lblSobrenome = tk.Label(janelaUsuarios,text="Informe o seu sobrenome: "
             ,font="Times"
             ,bg="white",foreground="black")
-    lblSobrenome.place(x=100,y=75)
+    lblSobrenome.place(x=100,y=275)
     entrySobrenome = tk.Entry(janelaUsuarios)
-    entrySobrenome.place(x=260, y=75)
+    entrySobrenome.place(x=260, y=275)
 
     lblDataNascimento = tk.Label(janelaUsuarios,text="Informe sua data de nascimento"
             ,font="Times"
             ,bg="white", foreground="black")
-    lblDataNascimento.place(x=100, y=100)
+    lblDataNascimento.place(x=100, y=300)
     entryDataNascimento = tk.Entry(janelaUsuarios)
-    entryDataNascimento.place(x=300, y=100)
+    entryDataNascimento.place(x=300, y=300)
 
     lblCidade = tk.Label(janelaUsuarios,text="Informe a sua cidade"
             ,font="Times"
             ,bg="white", foreground="black")
-    lblCidade.place(x=100,y=125)
+    lblCidade.place(x=100,y=325)
     entryCidade = tk.Entry(janelaUsuarios)
-    entryCidade.place(x=230,y=125)
+    entryCidade.place(x=230,y=325)
 
     lblEstado = tk.Label(janelaUsuarios, text="Informe o estado: "
             ,font="Times"
             ,bg="white",foreground="black")
-    lblEstado.place(x=100, y=150)
+    lblEstado.place(x=100, y=350)
     entryEstado = tk.Entry(janelaUsuarios)
-    entryEstado.place(x=230, y=150)
+    entryEstado.place(x=230, y=350)
     
     def salvarUsuario():
         conn = conexao()
@@ -101,7 +127,7 @@ def cadastrarUsuarios():
         #print("O estado informado foi: ",entryEstado.get())
     btnSalvar = tk.Button(janelaUsuarios,width=20
             ,text="Salvar", command=salvarUsuario)
-    btnSalvar.place(x=100,y=175)
+    btnSalvar.place(x=100,y=400)
     
     #entryNome.insert("end","teste")
     #entryNome.insert("end","tormes")
