@@ -78,15 +78,24 @@ def inserirUsuarios(usuario):
         con.commit()
         desconectar(con)
 
-def cadastrarUsuarios():
+def abrirTelaUsuarios():
     janelaUsuarios = tk.Toplevel(app)
     selecionarUsuarios(janelaUsuarios)
+
+    lblid=tk.Label(janelaUsuarios,text="informe o Id:"
+                ,font="times"
+                ,bg="white",foreground="black")
+    lblid.place(x=100,y=230)
+    entryid=tk.Entry(janelaUsuarios)
+    entryid.place(x=230,y=235)
+
     lblNome = tk.Label(janelaUsuarios,text="Informe o seu nome: "
+
             ,font="Times"
             ,bg="white",foreground="black")
     lblNome.place(x=100,y=250)
     entryNome = tk.Entry(janelaUsuarios)
-    entryNome.place(x=230,y=250)
+    entryNome.place(x=230,y=255)
     
     lblSobrenome = tk.Label(janelaUsuarios,text="Informe o seu sobrenome: "
             ,font="Times"
@@ -134,20 +143,19 @@ def cadastrarUsuarios():
     
     janelaUsuarios.title("Cadastro de Usuários")
     janelaUsuarios.geometry("800x600")
-def cadastrarProdutos():
+def abrirTelaProdutos():
     janelaProduto = tk.Toplevel(app)
     janelaProduto.title("Cadastro de Produtos")
     janelaProduto.geometry("800x600")
 app = tk.Tk()
-
 menuPrincipal = tk.Menu(app)
 app.config(menu=menuPrincipal)
 
 fileMenu = tk.Menu(menuPrincipal)
 fileMenu.add_command(label="Cadastrar Usuários"
-            ,command=cadastrarUsuarios)
+            ,command=abrirTelaUsuarios)
 fileMenu.add_command(label="Cadastrar Produtos"
-            ,command=cadastrarProdutos)
+            ,command=abrirTelaProdutos)
 menuPrincipal.add_cascade(label="Funcao"
                         ,menu=fileMenu)
 
