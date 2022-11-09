@@ -89,7 +89,6 @@ def inserirUsuarios(usuario):
         con.commit()
         desconectar(con)
 
-
 def abrirTelaUsuarios():
     janelaUsuarios = tk.Toplevel(app)
     selecionarUsuarios(janelaUsuarios)
@@ -146,6 +145,7 @@ def abrirTelaUsuarios():
         usuario = Usuarios(None, entryNome.get(), entrySobrenome.get(),entryCidade.get(),
         entryEstado.get(), entryDataNascimento.get())
         inserirUsuarios(usuario)
+        selecionarUsuarios(janelaUsuarios)
 
     def deletarUsuarios():
         con = conexao()
@@ -157,28 +157,25 @@ def abrirTelaUsuarios():
                 selecionarUsuarios(janelaUsuarios)
         else:
                 showinfo(title='Informação', message='Erro, Id não informado')
+    
     def atualizarUsuarios():
         con = conexao()
         if(entryId.get()):
-                usuario = Usuarios(None, entryNome.get(),entrySobrenome.get(),entryCidade.get(),entryEstado.get(),entryDataNascimento.get())
-                cursor= con.cursor()
-                sql = "UPDATE usuarios set nome = %s,sobrenome= %s, cidade = %s, estado = $s, data_nascimento= %s WHERE id= %s"
-                val = (f'{usuario.nome}',f'{usuario.sobrenome}',f'{usuario.cidade}',f'{usuario.estado}', f'{usuario.data_nascimento}',f'{usuario.id}')
-                cursor.execute(sql,val)
-                con.commit()
-                desconectar(con)
-                selecionarUsuarios(janelaUsuarios)
-        else:
-                showinfo(title='informaçao',message='erro, id não informado')        
-
+                usuario = Usuarios(None, entryNome.get(), entrySobrenome.get()
+                ,entryCidade.get(), entryEstado.get(), entryDataNascimento.get())
+                cursor = con.cursor()
+                sql = "UPDATE usuarios set nome = %s, sobrenome = %s, cidade = %s, estado = %s, data_nascimento = %s WHERE id = %s"
+                val = (f'{usuario.nome}',f'{usuario.sobrenome}', f'{usuario.cidade}')
     btnSalvar = tk.Button(janelaUsuarios,width=20
             ,text="Salvar", command=salvarUsuario)
     btnSalvar.place(x=100,y=375)
 
-    btnAtualizar= tk.Button(janelaUsuarios,width=20,text='atualizar',command= deletarUsuarios, state=tk.ACTIVE)
+    btnAtualizar = tk.Button(janelaUsuarios,width=20,text='Atualizar'
+      , command=deletarUsuarios, state= tk.ACTIVE)
     btnAtualizar.place(x=250,y=375)
 
-    btnDeletar= tk.Button(janelaUsuarios,width=20,text='deletar',command=deletarUsuarios,state=tk.ACTIVE)
+    btnDeletar = tk.Button(janelaUsuarios,width=20,text='Deletar'
+    ,command=deletarUsuarios, state=tk.ACTIVE)
     btnDeletar.place(x=400,y=375)
     
     #entryNome.insert("end","teste")
